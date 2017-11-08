@@ -1,5 +1,5 @@
-# lua-pegasus-router
-Router plugin for [Pegasus](http://evandrolg.github.io/pegasus.lua) server based on [router](https://github.com/APItools/router.lua) library
+# lua-pegasus-websocket
+WebSocket plugin for [Pegasus](http://evandrolg.github.io/pegasus.lua) http server
 
 ### Limitations
 
