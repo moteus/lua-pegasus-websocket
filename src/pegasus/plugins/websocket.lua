@@ -1,4 +1,4 @@
-local tools = require "pegasus.plugins.websocket.tools"
+local tools = require 'pegasus.plugins.websocket.tools'
 local Extensions = tools.prequire "websocket.extensions"
 
 local sha1, base64, split, unquote =
@@ -17,7 +17,7 @@ WebSocket.__index = WebSocket
 
 function WebSocket:new(opt)
   local o = setmetatable({}, self)
-  o._protocols = opt and opt.protocols or {}
+  o._protocols = opt and opt.protocols
   if Extensions then
     if opt and opt.extensions and #opt.extensions > 0 then
       o._extensions = Extensions.new()
@@ -107,7 +107,7 @@ function WebSocket:processUpgrade(request, response)
   -- Do upgrade
   response:sendOnlyHeaders()
 
-  -- Now connection is no more HTTP
+  -- Now connection is no more HTTP connection
   local client = request.client
   request.client, response.client = nil
 
