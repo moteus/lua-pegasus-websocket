@@ -1,8 +1,12 @@
 local copas         = require "copas"
 local socket        = require "socket"
 local Handler       = require "pegasus.handler"
-local WebSocket     = require "pegasus.plugins.websocket"
+local WebSocketBase = require "pegasus.plugins.websocket"
 local WebSocketSync = require "websocket.client_sync"
+
+-- Create new plugin to return `websocket.client_sync` socket
+local WebSocket = setmetatable({}, WebSocketBase) do
+WebSocket.__index = WebSocket
 
 local function WrapSocket(client)
   local ws = WebSocketSync()
@@ -11,6 +15,15 @@ local function WrapSocket(client)
   ws.is_server = true
   client:settimeout(-1)
   return ws
+end
+
+function WebSocket:processUpgrade(request, response)
+  local protocol, client, extensions = WebSocketBase.processUpgrade(self, request, response)
+  assert('websocket' == protocol)
+  assert(nil == extensions, 'Extensions does not supported')
+  return protocol, WrapSocket(client)
+end
+
 end
 
 local function echo(client)
@@ -38,7 +51,7 @@ local handler = Handler:new(function(request, response)
       if protocol == 'websocket' then
         protocol = response.headers['Sec-WebSocket-Protocol']
         print(" - WebSocket protocol:", protocol or "*")
-        return echo(WrapSocket(client))
+        return echo(client)
       end
       return client:close()
     end
