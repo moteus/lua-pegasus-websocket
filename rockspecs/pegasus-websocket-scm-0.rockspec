@@ -14,7 +14,6 @@ description = {
 
 dependencies = {
   "lua >= 5.1, < 5.4",
-  "router",
   "pegasus",
   -- "lua-websockets-extensions",
 }
