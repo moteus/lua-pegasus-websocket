@@ -33,19 +33,6 @@ end
 
 end
 
-local function echo(client)
-  while true do
-    local frame, opcode, was_clean, code, reason = client:receive()
-    if not frame then
-      print('--- STOP:', was_clean, code, reason)
-      break
-    end
-    print(client, 'RECV:', frame, opcode)
-    client:send(frame, opcode)
-  end
-  client:close()
-end
-
 local server = Pegasus:new{port = 8881, plugins={
   WebSocket:new{
     protocols  = { 'echo'  };
